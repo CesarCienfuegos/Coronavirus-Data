@@ -1,0 +1,82 @@
+def get_coronavirus_data(opcion):
+    import json
+    import requests
+    import pandas as pd
+    import pandas as pd
+    import numpy as np
+    from functools import reduce
+    import pandas_datareader.data as web
+    import datetime
+    import random
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+    import seaborn as sns
+    import os
+    #GET THE CORANIVURS DATA#
+    response = requests.get("https://pomber.github.io/covid19/timeseries.json")
+    data = json.loads(response.text)
+
+    if opcion == 1 : 
+    #MANIPULATING DATA#
+        list_date = []
+        list_confirmed = []
+        list_deaths = []
+        list_countries = []
+        for i in range(len(list(data.keys()))):
+            list_countries.append(list(data.keys())[i])
+
+        for a in range(len(list_countries)):    
+            for i in range(len(data[list_countries[a]])) :
+                list_date.append(data[list_countries[a]][i]['date']) 
+                list_confirmed.append(data[list_countries[a]][i]['confirmed'])
+                list_deaths.append(data[list_countries[a]][i]['deaths'])
+                lista_final = []
+                list_countries[a]
+        for a in range(len(list_countries)):
+               lista_final.append([list_countries[a]  for _ in range(len(data[list_countries[a]]))])
+        lista_final = sum(lista_final, [])
+ 
+ 
+        #Final
+        db_final = {'Date':list_date,'confirmed':list_confirmed,'deaths':list_deaths, 'countries':lista_final}
+        db_final = pd.DataFrame(db_final)
+        db_final['id'] = pd.factorize(db_final.countries)[0]+1
+        db_final.set_index('Date', inplace = True)
+        return(db_final)
+    elif opcion == 2:
+     
+        list_countries = []
+        for i in range(len(list(data.keys()))):
+            list_countries.append(list(data.keys())[i])
+            #for a in range(len(list_countries)):
+            #    for i in range(len(data[list_countries[a]])):
+            #         list_countries[a].append(data[list_countries[a]][i]['confirmed'])
+        globals()['list_countries_confirmed' + str(i)] = []
+        for i in range(len(list_countries)):
+            globals()['list_countries_confirmed' + str(i)] =[] 
+            for a in range(len(data[list_countries[i]])):
+                    globals()['list_countries_confirmed' + str(i)].append(data[list_countries[i]][a]['confirmed'])
+        globals()['list_countries_date' + str(i)] = []
+        for i in range(len(list_countries)):
+                globals()['list_countries_date' + str(i)] =[] 
+                for a in range(len(data[list_countries[i]])):
+                    globals()['list_countries_date' + str(i)].append(data[list_countries[i]][a]['date'])
+        
+        lista_1 = []
+        globals()['dict_countries_confirmed' + str(i)] = {}
+        globals()['dict_countries_date' + str(i)] = {}
+        for i in range(len(list_countries)) :
+            globals()['dict_countries_confirmed' + str(i)] = {list_countries[i]:globals()['list_countries_confirmed' + str(i)], 'Date':globals()['list_countries_date' + str(i)]}
+        #    globals()['dict_countries_date' + str(i)]  = {'date':globals()['list_countries_date' + str(i)]}
+            lista_1.append(globals()['dict_countries_confirmed' + str(i)]) 
+        lista_2 = []
+        globals()['pd_countries_confirmed' + str(i)] = pd.DataFrame()
+        for i in range(len(lista_1)):
+            globals()['pd_countries_confirmed' + str(i)] = pd.DataFrame(lista_1[i])
+            lista_2.append( globals()['pd_countries_confirmed' + str(i)])
+        merged = lista_2[0]    
+        for df in lista_2[1:]:
+            merged = pd.merge(merged,df,left_on='Date',right_on='Date')
+        merged['Date'] = pd.to_datetime(merged.Date)    
+        merged.set_index('Date', inplace = True)
+        return(merged)
