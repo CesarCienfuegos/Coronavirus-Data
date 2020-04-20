@@ -17,10 +17,11 @@ Ahora, para descargar esta tabla, primero tendríamos que fijar nuestra ubicaci�
 ```
 import os 
 import pandas as pd
-os.chdir("C:\\Users\\CESAR\\Downloads\\TODO\\TODO\\New folder\\Consultant - Copy")
+os.chdir("C:\\Users\\Cesar\\Repositorio\\")
 ```
-Luego, al final del gódigo simplemente pondríamos    
+Recuerden agregar doble forward slash. 
+Luego, al final del código simplemente pondríamos el nombre de nuestra tabla. 
  ```
 tabla.to_excel('tabla.xlsx')
 ```
-Lograndolo importar.
+Lograndolo importar a la ubicación elegida. Estaré actualizando este link de vez en cuando.
